@@ -1,0 +1,158 @@
+.wrapperIngame {
+    position: absolute;
+    top: -14px;
+    width: 100%;
+    height: 10%;
+    z-index: 20;
+    transition: all;
+
+}
+
+.gameInforamtion {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.playerLeft {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 200px;
+    background-color: rgba(122, 129, 110, 0.6);
+    border-radius: 10% 10% 53% 0% / 0% 0% 51% 10%;
+    border-right: 1px solid rgb(255, 255, 255);
+    border-bottom: 1px solid rgb(255, 255, 255);
+    overflow: hidden;
+}
+
+.playerLeft div {
+    margin-left: 20px;
+}
+
+.playerRight {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 200px;
+    background-color: rgba(110, 128, 151, 0.6);
+    border-radius: 10% 10% 0% 53% / 0% 0% 10% 51%;
+    border-left: 1px solid rgb(255, 255, 255);
+    border-bottom: 1px solid rgb(255, 255, 255);
+    overflow: hidden;
+
+}
+
+.playerRight div {
+    position: relative;
+    height: 20px;
+
+    margin-right: 20px;
+    text-align: right;
+
+}
+
+.playerRight div,
+.playerLeft div {
+    margin-top: 20px;
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+
+    font-family: Impact, Charcoal, sans-serif;
+    text-shadow: 1px 1px 4px #070104;
+}
+
+.spinner {
+    position: absolute;
+    border: 6px solid rgb(255, 255, 255);
+    border-top: 6px solid rgb(30, 189, 252);
+    border-radius: 50%;
+    width: 20px !important;
+    height: 20px !important;
+    left: 50%;
+    top: 4px;
+}
+
+.timeDiv {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 230px;
+
+    height: 100%;
+    background-color: rgba(47, 49, 48, 0.6);
+
+    border: 1px solid rgb(255, 255, 255);
+    border-top: 0;
+
+    border-radius: 0% 0% 20% 20% /0% 0% 100% 100%;
+
+    display: flex;
+}
+
+.timeDiv div {
+    margin-top: 14px;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+
+    font-family: Impact, Charcoal, sans-serif;
+    text-shadow: 1px 1px 4px #070104;
+}
+
+.timeLeft {
+    border-right: 0.5px solid rgb(255, 255, 255);
+    padding-left: 20px;
+}
+
+.timeRight {
+    border-left: 0.5px solid rgb(255, 255, 255);
+    padding-right: 20px;
+}
+
+/* card to pick color*/
+.card {
+    position: absolute;
+    top: 22%;
+    z-index: 20;
+    width: 200px;
+    height: 250px;
+    background-color: #070104;
+
+
+    border: 2px solid rgba(13, 0, 0, 0.9);
+
+    --s: 29.4px;
+    /* control the size */
+    --c1: rgba(50, 57, 52, 0.701);
+    --c2: rgba(93, 119, 123, 0.841);
+
+    --g: var(--c1) 3.125%, var(--c2) 0 9.375%,
+        var(--c1) 0 15.625%, var(--c2) 0 21.875%,
+        var(--c1) 0 28.125%, #c22d2d00 0;
+    background:
+        linear-gradient(225deg, #0000 3.125%, var(--c2) 0 9.375%,
+            #0000 0 78.125%, var(--c2) 0 84.375%, #0000 0) 0 calc(var(--s)/2),
+        linear-gradient(45deg, var(--g)) 0 var(--s),
+        linear-gradient(45deg, var(--g)) calc(var(--s)/-2) calc(var(--s)/-2),
+        linear-gradient(225deg, var(--g)) var(--s) 0,
+        linear-gradient(225deg, var(--g)) calc(var(--s)/2) var(--s),
+        repeating-linear-gradient(-45deg, var(--c1) -3.125% 3.125%, var(--c2) 0 9.375%);
+    background-size: calc(2*var(--s)) calc(2*var(--s));
+    perspective: 10000px;
+    transform-style: preserve-3d;
+    border-radius: 24px;
+}
+
+.cardLeft {
+    left: 24%;
+    /* transform: skewX(-4deg) rotateX(30deg); */
+}
+
+.cardRight {
+    right: 24%;
+    /* transform: skewX(4deg) rotateX(30deg); */
+}
