@@ -1,7 +1,7 @@
 import useGame from "../../store/useGame";
 import { AttackedSquare } from "./AttackedSquare";
 
-export const checkChecker = (checkProps) => {
+export const checkChecker = ({ chessMatrix }) => {
   const {
     chessMatrix,
     opponentColor,
@@ -9,7 +9,6 @@ export const checkChecker = (checkProps) => {
     tableLocationFrom,
     figure,
   } = checkProps;
-  chessMatrix[0][1].figure = "dad";
   // console.log("1");
   // console.log(JSON.parse(JSON.stringify();))
   // const chessMat = ches

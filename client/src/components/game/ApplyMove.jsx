@@ -49,27 +49,27 @@ export default function ApplyMove({ props }) {
       enPassantPlayed
     );
     // Check to the player's King
-    const kingSquares = chessMatrix
-      .flat()
-      .find((squares) => squares.figure === "king " + playerColor);
+    // const kingSquares = chessMatrix
+    //   .flat()
+    //   .find((squares) => squares.figure === "king " + playerColor);
 
-    const x = kingSquares.tableLocation[0];
-    const y = kingSquares.tableLocation[1];
+    // const x = kingSquares.tableLocation[0];
+    // const y = kingSquares.tableLocation[1];
 
-    const check = AttackedSquare(
-      x,
-      y,
-      chessMatrix,
-      opponentColor,
-      kingSquares.figure
-    );
+    // const check = AttackedSquare(
+    //   x,
+    //   y,
+    //   chessMatrix,
+    //   opponentColor,
+    //   kingSquares.figure
+    // );
 
-    if (check === true) {
-      onMoveUndo();
-      console.log(
-        "Your move is invalid because your king is in check. Please make a move to get your king out of check."
-      );
-    }
+    // if (check === true) {
+    //   onMoveUndo();
+    //   console.log(
+    //     "Your move is invalid because your king is in check. Please make a move to get your king out of check."
+    //   );
+    // }
   };
   return (
     <>
