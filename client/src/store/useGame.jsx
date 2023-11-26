@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import io from "socket.io-client";
+import { attackedSquare } from "../components/game/chessCheck/chessHelper";
 
 export default create((set, get) => {
   ////
@@ -51,7 +52,6 @@ export default create((set, get) => {
         tableLocationFrom: moveData.tableLocationFrom,
         tableLocationTo: moveData.tableLocationTo,
         captured: moveData.captured,
-        castling: moveData.castling,
       };
       if (moveData.enPassantPlayed) {
         opponentMove.enPassantPlayed = moveData.enPassantPlayed;
@@ -60,10 +60,19 @@ export default create((set, get) => {
       const newStates = {
         chessMatrix: newMatrix,
         applyMove: move,
-        opponentMove: [...get().opponentMoves, opponentMove],
+        opponentMoves: [...get().opponentMoves, opponentMove],
         opponentOnMove: false,
         onMove: true,
       };
+
+      if (moveData.checkKingOpponent) {
+        newStates.checkKingPlayer = true;
+        console.log(moveData.checkKingOpponent);
+      }
+
+      if (get().checkKingOpponent) {
+        newStates.checkKingOpponent = false;
+      }
 
       if (captured !== "empty") {
         newStates.applyCapture = [...get().applyCapture, captured];
@@ -74,6 +83,7 @@ export default create((set, get) => {
       }
 
       if (moveData.castling) {
+        newStates.castling = moveData.castling;
         const applyCastling = {};
         const opponentColor = get().opponentColor;
         let positionY = 0;
@@ -218,6 +228,11 @@ export default create((set, get) => {
     // En passant
     enPassantPossibility: false,
 
+    // Check king for player
+    checkKingPlayer: false,
+    // Check king for opponent
+    checkKingOpponent: false,
+
     setApplyMove: (
       tableLocationTo,
       figureName,
@@ -243,7 +258,6 @@ export default create((set, get) => {
         tableLocationFrom: tableLocationFrom,
         tableLocationTo: tableLocationTo,
         captured: captured,
-        castling: castling,
       };
 
       if (enPassant) {
@@ -253,7 +267,21 @@ export default create((set, get) => {
         playarMove.enPassantPlayed = enPassantPlayed;
       }
 
-      // OVDE DODATI KOD ZA PROVERU SAHA, AKO VRATI TRUE, ONDA NE POZVATI FUNKCIJU SET, ILI KORISTITI SETTIMEOUT
+      // Check for opponenet king check
+      const playerColor = get().playerColor;
+      const opponentColor = playerColor === "white" ? "black" : "white";
+
+      const { tableLocation: opponenetKingTableLocation } = newMatrix
+        .flat()
+        .find((square) => square.figure === "king " + opponentColor);
+
+      const kingCheck = attackedSquare(
+        opponenetKingTableLocation[0],
+        opponenetKingTableLocation[1],
+        newMatrix,
+        playerColor,
+        "none"
+      );
 
       const newStates = {
         applyMove: move,
@@ -264,14 +292,24 @@ export default create((set, get) => {
         onMove: false,
       };
 
+      if (kingCheck) {
+        playarMove.checkKingOpponent = true;
+        newStates.checkKingOpponent = true;
+      }
+
+      if (get().checkKingPlayer) {
+        newStates.checkKingPlayer = false;
+      }
+
       if (captured !== "empty") {
         newStates.applyCapture = [...get().applyCapture, captured];
       }
 
       // CASTLING
       if (castling) {
+        playarMove.castling = castling;
         const applyCastling = {};
-        const playerColor = get().playerColor;
+
         let positionY = 0;
         if (playerColor === "black") {
           positionY = 7;
@@ -323,7 +361,6 @@ export default create((set, get) => {
 
       const newStates = {
         onMove: false,
-        // applyMove: false,
         opponentOnMove: true,
         enPassantPossibility: false,
       };
@@ -344,6 +381,7 @@ export default create((set, get) => {
       set(newStates);
     },
 
+    // Only for undo captured figures
     applyUndoCaptured: false,
 
     onMoveUndo: () => {
@@ -381,30 +419,37 @@ export default create((set, get) => {
         playerMoves: playerMoves,
       };
 
-      if (moveToUndo.captured !== "empty") {
-        let x = moveToUndo.tableLocationTo[0];
-        let y = moveToUndo.tableLocationTo[1];
-
-        if (moveToUndo.enPassantPlayed) {
-          x = moveToUndo.enPassantPlayed[0];
-          y = moveToUndo.enPassantPlayed[1];
-        }
-
-        const capturedFigures = get().applyCapture;
-        const length = capturedFigures.length - 1;
-        const figure = capturedFigures[length];
-
-        newMatrix[x][y].figure = figure;
-
-        const position = currentMatrix[x][y].position;
-
-        capturedFigures.pop();
-        newStates.applyCapture = capturedFigures;
-        newStates.applyUndoCaptured = {
-          position: position,
-          figure: figure,
-        };
+      if (moveToUndo.checkKingOpponent) {
+        newStates.checkKingOpponent = false;
       }
+
+      let opponentLastMove = get().opponentMoves;
+      opponentLastMove = opponentLastMove[opponentLastMove.length - 1];
+      if (opponentLastMove.checkKingOpponent)
+        if (moveToUndo.captured !== "empty") {
+          let x = moveToUndo.tableLocationTo[0];
+          let y = moveToUndo.tableLocationTo[1];
+
+          if (moveToUndo.enPassantPlayed) {
+            x = moveToUndo.enPassantPlayed[0];
+            y = moveToUndo.enPassantPlayed[1];
+          }
+
+          const capturedFigures = get().applyCapture;
+          const length = capturedFigures.length - 1;
+          const figure = capturedFigures[length];
+
+          newMatrix[x][y].figure = figure;
+
+          const position = currentMatrix[x][y].position;
+
+          capturedFigures.pop();
+          newStates.applyCapture = capturedFigures;
+          newStates.applyUndoCaptured = {
+            position: position,
+            figure: figure,
+          };
+        }
 
       // CASTLING
       if (moveToUndo.castling) {

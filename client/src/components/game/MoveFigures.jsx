@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 import useGame from "../../store/useGame";
 import ApplyMove from "./ApplyMove";
-import { AttackedSquare } from "./AttackedSquare";
-import { checkChecker } from "./checkChecker.js";
+
+import { checkChecker, attackedSquare } from "./chessCheck/chessHelper.js";
 
 export default function MoveFigures() {
   const activeFigure = useGame((state) => state.activeFigure);
@@ -77,7 +77,7 @@ export default function MoveFigures() {
 //****
 //// King move
 //****
-const KingMove = ({
+export const KingMove = ({
   chessMatrix,
   activeFigure,
   opponentColor,
@@ -114,16 +114,16 @@ const KingMove = ({
           if (chessMatrix[0][curY].figure.includes("rook 0")) {
             const attackedSquares = [];
             attackedSquares.push(
-              AttackedSquare(curX, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX, curY, chessMatrix, opponentColor, "none")
             );
             attackedSquares.push(
-              AttackedSquare(curX - 1, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX - 1, curY, chessMatrix, opponentColor, "none")
             );
             attackedSquares.push(
-              AttackedSquare(curX - 2, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX - 2, curY, chessMatrix, opponentColor, "none")
             );
             attackedSquares.push(
-              AttackedSquare(curX - 3, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX - 3, curY, chessMatrix, opponentColor, "none")
             );
             if (attackedSquares.every((attacked) => attacked === false)) {
               setAvailableSquares((prevSquare) => [
@@ -159,19 +159,19 @@ const KingMove = ({
           if (chessMatrix[7][curY].figure.includes("rook 1")) {
             const attackedSquares = [];
             attackedSquares.push(
-              AttackedSquare(curX, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX, curY, chessMatrix, opponentColor, "none")
             );
             attackedSquares.push(
-              AttackedSquare(curX + 1, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX + 1, curY, chessMatrix, opponentColor, "none")
             );
             attackedSquares.push(
-              AttackedSquare(curX + 2, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX + 2, curY, chessMatrix, opponentColor, "none")
             );
             attackedSquares.push(
-              AttackedSquare(curX + 3, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX + 3, curY, chessMatrix, opponentColor, "none")
             );
             attackedSquares.push(
-              AttackedSquare(curX + 4, curY, chessMatrix, opponentColor, "none")
+              attackedSquare(curX + 4, curY, chessMatrix, opponentColor, "none")
             );
             if (attackedSquares.every((attacked) => attacked === false)) {
               setAvailableSquares((prevSquare) => [
@@ -196,7 +196,7 @@ const KingMove = ({
     if (curY < 7)
       if (!chessMatrix[curX][curY + 1].figure.includes(playerColor)) {
         if (
-          !AttackedSquare(curX, curY + 1, chessMatrix, opponentColor, figure)
+          !attackedSquare(curX, curY + 1, chessMatrix, opponentColor, figure)
         ) {
           let capture = false;
           if (chessMatrix[curX][curY + 1].figure.includes(opponentColor)) {
@@ -220,7 +220,7 @@ const KingMove = ({
     if (curY > 0)
       if (!chessMatrix[curX][curY - 1].figure.includes(playerColor)) {
         if (
-          !AttackedSquare(curX, curY - 1, chessMatrix, opponentColor, figure)
+          !attackedSquare(curX, curY - 1, chessMatrix, opponentColor, figure)
         ) {
           let capture = false;
           if (chessMatrix[curX][curY - 1].figure.includes(opponentColor)) {
@@ -243,7 +243,7 @@ const KingMove = ({
     if (curX < 7)
       if (!chessMatrix[curX + 1][curY].figure.includes(playerColor)) {
         if (
-          !AttackedSquare(curX + 1, curY, chessMatrix, opponentColor, figure)
+          !attackedSquare(curX + 1, curY, chessMatrix, opponentColor, figure)
         ) {
           let capture = false;
           if (chessMatrix[curX + 1][curY].figure.includes(opponentColor)) {
@@ -266,7 +266,7 @@ const KingMove = ({
     if (curX > 0)
       if (!chessMatrix[curX - 1][curY].figure.includes(playerColor)) {
         if (
-          !AttackedSquare(curX - 1, curY, chessMatrix, opponentColor, figure)
+          !attackedSquare(curX - 1, curY, chessMatrix, opponentColor, figure)
         ) {
           let capture = false;
           if (chessMatrix[curX - 1][curY].figure.includes(opponentColor)) {
@@ -290,7 +290,7 @@ const KingMove = ({
     if (curX < 7 && curY < 7)
       if (!chessMatrix[curX + 1][curY + 1].figure.includes(playerColor)) {
         if (
-          !AttackedSquare(
+          !attackedSquare(
             curX + 1,
             curY + 1,
             chessMatrix,
@@ -320,7 +320,7 @@ const KingMove = ({
     if (curX > 0 && curY < 7)
       if (!chessMatrix[curX - 1][curY + 1].figure.includes(playerColor)) {
         if (
-          !AttackedSquare(
+          !attackedSquare(
             curX - 1,
             curY + 1,
             chessMatrix,
@@ -350,7 +350,7 @@ const KingMove = ({
     if (curX < 7 && curY > 0)
       if (!chessMatrix[curX + 1][curY - 1].figure.includes(playerColor)) {
         if (
-          !AttackedSquare(
+          !attackedSquare(
             curX + 1,
             curY - 1,
             chessMatrix,
@@ -379,7 +379,7 @@ const KingMove = ({
     if (curX > 0 && curY > 0)
       if (!chessMatrix[curX - 1][curY - 1].figure.includes(playerColor)) {
         if (
-          !AttackedSquare(
+          !attackedSquare(
             curX - 1,
             curY - 1,
             chessMatrix,
@@ -419,11 +419,12 @@ const KingMove = ({
 //****
 //// Knight move
 //****
-const KnightMoves = ({
+export const KnightMoves = ({
   chessMatrix,
   activeFigure,
   opponentColor,
   playerColor,
+  checkMateChecker = false,
 }) => {
   const { tableLocation } = chessMatrix
     .flat()
@@ -444,17 +445,25 @@ const KnightMoves = ({
           if (chessMatrix[curX + 1][curY + 2].figure.includes(opponentColor)) {
             capture = true;
           }
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: chessMatrix[curX + 1][curY + 2].position[0],
-              yCoo: chessMatrix[curX + 1][curY + 2].position[1],
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX + 1, curY + 2],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          const checkProps = {
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX + 1, curY + 2],
+            opponentColor: opponentColor,
+            chessMatrix: chessMatrix,
+            figure: activeFigure,
+          };
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: chessMatrix[curX + 1][curY + 2].position[0],
+                yCoo: chessMatrix[curX + 1][curY + 2].position[1],
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX + 1, curY + 2],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
         }
       }
 
@@ -465,17 +474,25 @@ const KnightMoves = ({
           if (chessMatrix[curX - 1][curY + 2].figure.includes(opponentColor)) {
             capture = true;
           }
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: chessMatrix[curX - 1][curY + 2].position[0],
-              yCoo: chessMatrix[curX - 1][curY + 2].position[1],
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX - 1, curY + 2],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          const checkProps = {
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX - 1, curY + 2],
+            opponentColor: opponentColor,
+            chessMatrix: chessMatrix,
+            figure: activeFigure,
+          };
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: chessMatrix[curX - 1][curY + 2].position[0],
+                yCoo: chessMatrix[curX - 1][curY + 2].position[1],
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX - 1, curY + 2],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
         }
       }
     }
@@ -488,17 +505,25 @@ const KnightMoves = ({
           if (chessMatrix[curX + 1][curY - 2].figure.includes(opponentColor)) {
             capture = true;
           }
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: chessMatrix[curX + 1][curY - 2].position[0],
-              yCoo: chessMatrix[curX + 1][curY - 2].position[1],
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX + 1, curY - 2],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          const checkProps = {
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX + 1, curY - 2],
+            opponentColor: opponentColor,
+            chessMatrix: chessMatrix,
+            figure: activeFigure,
+          };
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: chessMatrix[curX + 1][curY - 2].position[0],
+                yCoo: chessMatrix[curX + 1][curY - 2].position[1],
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX + 1, curY - 2],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
         }
       }
       // left
@@ -508,17 +533,25 @@ const KnightMoves = ({
           if (chessMatrix[curX - 1][curY - 2].figure.includes(opponentColor)) {
             capture = true;
           }
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: chessMatrix[curX - 1][curY - 2].position[0],
-              yCoo: chessMatrix[curX - 1][curY - 2].position[1],
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX - 1, curY - 2],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          const checkProps = {
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX - 1, curY - 2],
+            opponentColor: opponentColor,
+            chessMatrix: chessMatrix,
+            figure: activeFigure,
+          };
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: chessMatrix[curX - 1][curY - 2].position[0],
+                yCoo: chessMatrix[curX - 1][curY - 2].position[1],
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX - 1, curY - 2],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
         }
       }
     }
@@ -531,17 +564,25 @@ const KnightMoves = ({
           if (chessMatrix[curX + 2][curY + 1].figure.includes(opponentColor)) {
             capture = true;
           }
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: chessMatrix[curX + 2][curY + 1].position[0],
-              yCoo: chessMatrix[curX + 2][curY + 1].position[1],
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX + 2, curY + 1],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          const checkProps = {
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX + 2, curY + 1],
+            opponentColor: opponentColor,
+            chessMatrix: chessMatrix,
+            figure: activeFigure,
+          };
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: chessMatrix[curX + 2][curY + 1].position[0],
+                yCoo: chessMatrix[curX + 2][curY + 1].position[1],
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX + 2, curY + 1],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
         }
       }
       // back
@@ -551,17 +592,25 @@ const KnightMoves = ({
           if (chessMatrix[curX + 2][curY - 1].figure.includes(opponentColor)) {
             capture = true;
           }
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: chessMatrix[curX + 2][curY - 1].position[0],
-              yCoo: chessMatrix[curX + 2][curY - 1].position[1],
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX + 2, curY - 1],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          const checkProps = {
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX + 2, curY - 1],
+            opponentColor: opponentColor,
+            chessMatrix: chessMatrix,
+            figure: activeFigure,
+          };
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: chessMatrix[curX + 2][curY - 1].position[0],
+                yCoo: chessMatrix[curX + 2][curY - 1].position[1],
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX + 2, curY - 1],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
         }
       }
     }
@@ -574,17 +623,25 @@ const KnightMoves = ({
           if (chessMatrix[curX - 2][curY + 1].figure.includes(opponentColor)) {
             capture = true;
           }
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: chessMatrix[curX - 2][curY + 1].position[0],
-              yCoo: chessMatrix[curX - 2][curY + 1].position[1],
-              figureName: activeFigure,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX - 2, curY + 1],
-              capture: capture,
-            },
-          ]);
+          const checkProps = {
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX - 2, curY + 1],
+            opponentColor: opponentColor,
+            chessMatrix: chessMatrix,
+            figure: activeFigure,
+          };
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: chessMatrix[curX - 2][curY + 1].position[0],
+                yCoo: chessMatrix[curX - 2][curY + 1].position[1],
+                figureName: activeFigure,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX - 2, curY + 1],
+                capture: capture,
+              },
+            ]);
         }
       }
       // back
@@ -594,17 +651,25 @@ const KnightMoves = ({
           if (chessMatrix[curX - 2][curY - 1].figure.includes(opponentColor)) {
             capture = true;
           }
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: chessMatrix[curX - 2][curY - 1].position[0],
-              yCoo: chessMatrix[curX - 2][curY - 1].position[1],
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX - 2, curY - 1],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          const checkProps = {
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX - 2, curY - 1],
+            opponentColor: opponentColor,
+            chessMatrix: chessMatrix,
+            figure: activeFigure,
+          };
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: chessMatrix[curX - 2][curY - 1].position[0],
+                yCoo: chessMatrix[curX - 2][curY - 1].position[1],
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX - 2, curY - 1],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
         }
       }
     }
@@ -642,36 +707,48 @@ const QueenMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[curX][i].position[1];
       let capture = false;
       const figure = chessMatrix[curX][i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX, i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX, i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX, i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX, i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX, i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
     // Right
     for (let i = curX + 1; i < chessMatrix.length; i++) {
@@ -679,36 +756,46 @@ const QueenMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[i][curY].position[1];
       let capture = false;
       const figure = chessMatrix[i][curY].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [i, curY],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [i, curY],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [i, curY],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [i, curY],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [i, curY],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Back
@@ -718,36 +805,45 @@ const QueenMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       let capture = false;
       const figure = chessMatrix[curX][i].figure;
 
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX, i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX, i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX, i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX, i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX, i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Left
@@ -757,36 +853,46 @@ const QueenMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       let capture = false;
       const figure = chessMatrix[i][curY].figure;
 
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [i, curY],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
+
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [i, curY],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [i, curY],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [i, curY],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [i, curY],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
     // Forward right
     const endTableFR = Math.max(curX, curY);
@@ -795,36 +901,47 @@ const QueenMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[curX + i][curY + i].position[1];
       let capture = false;
       const figure = chessMatrix[curX + i][curY + i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX + i, curY + i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
+
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX + i, curY + i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX + i, curY + i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX + i, curY + i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX + i, curY + i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Back left
@@ -836,36 +953,47 @@ const QueenMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
 
       let capture = false;
       const figure = chessMatrix[curX - i][curY - i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX - i, curY - i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
+
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX - i, curY - i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX - i, curY - i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX - i, curY - i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX - i, curY - i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Back right
@@ -881,36 +1009,46 @@ const QueenMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[curX + i][curY - i].position[1];
       let capture = false;
       const figure = chessMatrix[curX + i][curY - i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX + i, curY - i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX + i, curY - i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX + i, curY - i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX + i, curY - i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX + i, curY - i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Forward left
@@ -925,36 +1063,46 @@ const QueenMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[curX - i][curY + i].position[1];
       let capture = false;
       const figure = chessMatrix[curX - i][curY + i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX - i, curY + i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX - i, curY + i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX - i, curY + i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX - i, curY + i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX - i, curY + i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
     return () => setAvailableSquares([]);
   }, [activeFigure]);
@@ -987,36 +1135,47 @@ const RookMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[curX][i].position[1];
       let capture = false;
       const figure = chessMatrix[curX][i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX, i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
+
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX, i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX, i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX, i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX, i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
     // Right
     for (let i = curX + 1; i < chessMatrix.length; i++) {
@@ -1024,36 +1183,46 @@ const RookMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[i][curY].position[1];
       let capture = false;
       const figure = chessMatrix[i][curY].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [i, curY],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [i, curY],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [i, curY],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [i, curY],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [i, curY],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Back
@@ -1063,36 +1232,46 @@ const RookMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       let capture = false;
       const figure = chessMatrix[curX][i].figure;
 
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX, i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
+
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX, i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX, i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX, i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX, i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Left
@@ -1102,36 +1281,46 @@ const RookMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       let capture = false;
       const figure = chessMatrix[i][curY].figure;
 
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [i, curY],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
+
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [i, curY],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [i, curY],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [i, curY],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [i, curY],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     return () => setAvailableSquares([]);
@@ -1167,36 +1356,46 @@ const BishopMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[curX + i][curY + i].position[1];
       let capture = false;
       const figure = chessMatrix[curX + i][curY + i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX + i, curY + i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX + i, curY + i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX + i, curY + i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX + i, curY + i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX + i, curY + i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Back left
@@ -1208,36 +1407,46 @@ const BishopMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
 
       let capture = false;
       const figure = chessMatrix[curX - i][curY - i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX - i, curY - i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX - i, curY - i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX - i, curY - i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX - i, curY - i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX - i, curY - i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Back right
@@ -1253,36 +1462,46 @@ const BishopMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[curX + i][curY - i].position[1];
       let capture = false;
       const figure = chessMatrix[curX + i][curY - i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX + i, curY - i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX + i, curY - i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX + i, curY - i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX + i, curY - i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX + i, curY - i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     // Forward left
@@ -1297,36 +1516,47 @@ const BishopMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
       const yCoo = chessMatrix[curX - i][curY + i].position[1];
       let capture = false;
       const figure = chessMatrix[curX - i][curY + i].figure;
+
+      const checkProps = {
+        tableLocationFrom: [curX, curY],
+        tableLocation: [curX - i, curY + i],
+        opponentColor: opponentColor,
+        chessMatrix: chessMatrix,
+        figure: activeFigure,
+      };
+
       if (figure != "empty") {
         if (figure.includes(opponentColor)) {
           capture = true;
-          setAvailableSquares((prevSquare) => [
-            ...prevSquare,
-            {
-              xCoo: xCoo,
-              yCoo: yCoo,
-              tableLocationFrom: [curX, curY],
-              tableLocation: [curX - i, curY + i],
-              figureName: activeFigure,
-              capture: capture,
-            },
-          ]);
+          if (!checkChecker(checkProps))
+            setAvailableSquares((prevSquare) => [
+              ...prevSquare,
+              {
+                xCoo: xCoo,
+                yCoo: yCoo,
+                tableLocationFrom: [curX, curY],
+                tableLocation: [curX - i, curY + i],
+                figureName: activeFigure,
+                capture: capture,
+              },
+            ]);
           break;
         } else {
           break;
         }
       }
-      setAvailableSquares((prevSquare) => [
-        ...prevSquare,
-        {
-          xCoo: xCoo,
-          yCoo: yCoo,
-          tableLocationFrom: [curX, curY],
-          tableLocation: [curX - i, curY + i],
-          figureName: activeFigure,
-          capture: capture,
-        },
-      ]);
+      if (!checkChecker(checkProps))
+        setAvailableSquares((prevSquare) => [
+          ...prevSquare,
+          {
+            xCoo: xCoo,
+            yCoo: yCoo,
+            tableLocationFrom: [curX, curY],
+            tableLocation: [curX - i, curY + i],
+            figureName: activeFigure,
+            capture: capture,
+          },
+        ]);
     }
 
     return () => setAvailableSquares([]);
@@ -1368,7 +1598,6 @@ const PawnWhiteMoves = ({ chessMatrix, activeFigure, opponentColor }) => {
           chessMatrix: chessMatrix,
           figure: activeFigure,
         };
-        // console.log(checkProps);
         if (!checkChecker(checkProps))
           setAvailableSquares((prevSquare) => [
             ...prevSquare,

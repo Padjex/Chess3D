@@ -4,6 +4,7 @@ import FieldsHelper from "./FileldHelper";
 import SetGame from "./SetGame";
 import useGame from "../../store/useGame";
 import MoveFigures from "./MoveFigures";
+import CheckMateChecker from "./CheckMateChecker";
 
 export default function Game() {
   const textureBlack = useTexture("./blender/proba/black/color.jpg");
@@ -12,7 +13,9 @@ export default function Game() {
   const whiteMaterial = new THREE.MeshStandardMaterial({ map: textureWhite });
 
   const started = useGame((state) => state.started);
+  const gameStarted = useGame((state) => state.players);
 
+  // console.log(gameStarted);
   // for pick color
   // const players = useGame((state) => state.players);
   // const readyOppnent = players.length;
@@ -28,6 +31,7 @@ export default function Game() {
           <MoveFigures />
         </>
       )}
+      {gameStarted.length === 2 ? <CheckMateChecker /> : null}
       <FieldsHelper />
       {/* for pick color */}
       {/* {readyOppnent !== 0 ? (

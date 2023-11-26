@@ -1,7 +1,36 @@
-//****
-//// Attacked square ?
-//****
-export const AttackedSquare = (
+export const checkChecker = ({
+  chessMatrix,
+  opponentColor,
+  tableLocation,
+  tableLocationFrom,
+  figure,
+}) => {
+  const playerColor = opponentColor === "white" ? "black" : "white";
+
+  const newMatrix = JSON.parse(JSON.stringify(chessMatrix));
+  const curX = tableLocationFrom[0];
+  const curY = tableLocationFrom[1];
+
+  const posX = tableLocation[0];
+  const posY = tableLocation[1];
+
+  newMatrix[curX][curY].figure = "empty";
+  newMatrix[posX][posY].figure = figure;
+
+  const kingSquare = newMatrix
+    .flat()
+    .find((square) => square.figure === "king " + playerColor);
+
+  const kingX = kingSquare.tableLocation[0];
+  const kingY = kingSquare.tableLocation[1];
+
+  const check = attackedSquare(kingX, kingY, newMatrix, opponentColor, "none");
+
+  return check;
+};
+
+// Attacked square
+export const attackedSquare = (
   x,
   y,
   chessMatrix,

@@ -1,7 +1,5 @@
 import * as THREE from "three";
-
 import useGame from "../../store/useGame";
-import { AttackedSquare } from "./AttackedSquare";
 
 const redMaterial = new THREE.MeshBasicMaterial({
   transparent: true,
@@ -30,13 +28,8 @@ export default function ApplyMove({ props }) {
     enPassant = false,
     enPassantPlayed = false,
   } = props;
-  const playerColor = useGame((state) => state.playerColor);
-  const chessMatrix = useGame((state) => state.chessMatrix);
+
   const setApplyMove = useGame((state) => state.setApplyMove);
-
-  const onMoveUndo = useGame((state) => state.onMoveUndo);
-
-  const opponentColor = playerColor === "white" ? "black" : "white";
 
   // set new move, send a props on click to zustand
   const makeMove = () => {
@@ -48,28 +41,6 @@ export default function ApplyMove({ props }) {
       enPassant,
       enPassantPlayed
     );
-    // Check to the player's King
-    // const kingSquares = chessMatrix
-    //   .flat()
-    //   .find((squares) => squares.figure === "king " + playerColor);
-
-    // const x = kingSquares.tableLocation[0];
-    // const y = kingSquares.tableLocation[1];
-
-    // const check = AttackedSquare(
-    //   x,
-    //   y,
-    //   chessMatrix,
-    //   opponentColor,
-    //   kingSquares.figure
-    // );
-
-    // if (check === true) {
-    //   onMoveUndo();
-    //   console.log(
-    //     "Your move is invalid because your king is in check. Please make a move to get your king out of check."
-    //   );
-    // }
   };
   return (
     <>

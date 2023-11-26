@@ -6,6 +6,7 @@ import useGame from "./store/useGame";
 import Interface from "./components/interface/Interface";
 import { AnimatePresence } from "framer-motion";
 import ControlsButtons from "./components/interface/ControlButtons";
+import Console from "./components/interface/Console";
 
 function App() {
   const ready = useGame((state) => state.loaded);
@@ -30,6 +31,7 @@ function App() {
       {!start && <LoadingScreen />}
       {start && <Interface />}
       {start && <ControlsButtons />}
+      {start && <Console />}
 
       <Canvas
         // flat
