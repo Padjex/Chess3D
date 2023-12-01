@@ -12,7 +12,7 @@ import { Perf } from "r3f-perf";
 export default function Experience() {
   return (
     <>
-      {/* <Perf /> */}
+      <Perf />
       <OrbitControls makeDefault />
       <Model />
       <Game />

@@ -67,7 +67,7 @@ export default create((set, get) => {
 
       if (moveData.checkKingOpponent) {
         newStates.checkKingPlayer = true;
-        console.log(moveData.checkKingOpponent);
+        opponentMove.checkKingOpponent = true;
       }
 
       if (get().checkKingOpponent) {
@@ -297,6 +297,7 @@ export default create((set, get) => {
         newStates.checkKingOpponent = true;
       }
 
+      // "If 'checkkingPlayer' is true, uncheck it."
       if (get().checkKingPlayer) {
         newStates.checkKingPlayer = false;
       }
@@ -346,6 +347,11 @@ export default create((set, get) => {
     // for ControlButton.jsx
     opponentOnMove: true,
 
+    // State that briefly becomes true after each confirmed move.
+
+    checkForMate: false,
+    setCheckForMate: () => set({ checkForMate: false }),
+
     // A method that is called when the user presses the confirm button
     // The confirm button is only available if the player has already made a move
     onMoveConfirm: () => {
@@ -364,6 +370,10 @@ export default create((set, get) => {
         opponentOnMove: true,
         enPassantPossibility: false,
       };
+
+      if (playerMoves.length > 1) {
+        newStates.checkForMate = true;
+      }
 
       // CASTLING
       if (playerMove.figure.includes("king")) {
@@ -387,6 +397,7 @@ export default create((set, get) => {
     onMoveUndo: () => {
       const currentMatrix = get().chessMatrix;
       const playerMoves = get().playerMoves;
+
       const moveToUndo = playerMoves[playerMoves.length - 1];
 
       const previusTableLocation = moveToUndo.tableLocationFrom;
@@ -423,33 +434,41 @@ export default create((set, get) => {
         newStates.checkKingOpponent = false;
       }
 
-      let opponentLastMove = get().opponentMoves;
-      opponentLastMove = opponentLastMove[opponentLastMove.length - 1];
-      if (opponentLastMove.checkKingOpponent)
-        if (moveToUndo.captured !== "empty") {
-          let x = moveToUndo.tableLocationTo[0];
-          let y = moveToUndo.tableLocationTo[1];
+      let opponentMoves = get().opponentMoves;
 
-          if (moveToUndo.enPassantPlayed) {
-            x = moveToUndo.enPassantPlayed[0];
-            y = moveToUndo.enPassantPlayed[1];
-          }
+      if (opponentMoves.length > 1) {
+        const opponentLastMove = opponentMoves[opponentMoves.length - 1];
 
-          const capturedFigures = get().applyCapture;
-          const length = capturedFigures.length - 1;
-          const figure = capturedFigures[length];
-
-          newMatrix[x][y].figure = figure;
-
-          const position = currentMatrix[x][y].position;
-
-          capturedFigures.pop();
-          newStates.applyCapture = capturedFigures;
-          newStates.applyUndoCaptured = {
-            position: position,
-            figure: figure,
-          };
+        if (opponentLastMove.checkKingOpponent) {
+          newStates.checkKingPlayer = true;
         }
+      }
+
+      // Undo capture
+      if (moveToUndo.captured !== "empty") {
+        let x = moveToUndo.tableLocationTo[0];
+        let y = moveToUndo.tableLocationTo[1];
+
+        if (moveToUndo.enPassantPlayed) {
+          x = moveToUndo.enPassantPlayed[0];
+          y = moveToUndo.enPassantPlayed[1];
+        }
+
+        const capturedFigures = get().applyCapture;
+        const length = capturedFigures.length - 1;
+        const figure = capturedFigures[length];
+
+        newMatrix[x][y].figure = figure;
+
+        const position = currentMatrix[x][y].position;
+
+        capturedFigures.pop();
+        newStates.applyCapture = capturedFigures;
+        newStates.applyUndoCaptured = {
+          position: position,
+          figure: figure,
+        };
+      }
 
       // CASTLING
       if (moveToUndo.castling) {
