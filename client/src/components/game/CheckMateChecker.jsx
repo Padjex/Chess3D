@@ -140,7 +140,8 @@ export default function CheckMateChecker() {
       });
 
       if (!isAvailableSquare) {
-        alert("WIN");
+        if (checkKingPlayer) alert("win");
+        else alert("stalemate");
       }
     }
     return () => {
